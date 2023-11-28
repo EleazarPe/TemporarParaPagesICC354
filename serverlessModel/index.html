@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,700&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="assets/css/Login-Animate.css">
+    <link rel="stylesheet" href="assets/css/advertencia.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body style="margin-right: 20px;margin-left: 20px;border-color: var(--bs-red);">
+    <div class="bounce animated" style="min-height: 20px;max-height: 400px;background: var(--bs-gray-400);margin-top: 50px;margin-right: 20%;margin-left: 20%;min-width: 250px;border-radius: 5px;border-color: var(--bs-blue);border-bottom-color: var(--bs-gray-500);">
+        <h1 style="text-align: center;font-family: Oswald, sans-serif;font-size: 50px;margin-top: 0px;">Reservas de Laboratorios-EICT</h1>
+    </div>
+    <div class="text-start" style="background: var(--bs-gray-400);transform: perspective(0px) skew(0deg);"><button class="btn btn-primary d-xl-flex align-items-xl-center pull-left" style="text-align: justify;" onclick="toggleDiv()"><i class="fa fa-address-card"></i>&nbsp;Agregar</button> <button id="pasadosbtn" class="btn btn-primary pull-right" type="button" style="background: var(--bs-teal);border-color: var(--bs-teal);" onclick="cambiarEstado()"><i class="fa fa-hourglass-end"></i>&nbsp;Pasados</button>
+        <div class="col-md-12 search-table-col" style="border-color: rgba(37,71,106,0.56);text-align: left;background: var(--bs-white);margin-top: 50px;    "><span class="counter pull-right"></span>
+            <div class="table-responsive table table-hover table-bordered results">
+                <table class="table table-hover table-bordered; margin-bottom: 0px;" id="miTabla">
+                    <thead class="bill-header cs">
+                        <tr>
+                            <th id="trs-hd-1" class="col-lg-1">ID</th>
+                            <th id="trs-hd-2" class="col-lg-2">Nombre</th>
+                            <th id="trs-hd-3" class="col-lg-3">Laboratorio</th>
+                            <th id="trs-hd-4" class="col-lg-2">Fecha y hora</th>
+                            <th id="trs-hd-6" class="col-lg-2">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="warning no-result">
+                            <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
+                        </tr>
+                        <!-- <tr style="text-align: center;">
+                            <td style="text-align: left;">1014-0933</td>
+                            <td>India</td>
+                            <td>ITT-202</td>
+                            <td>11/07/2023&nbsp; 10:00-12:00</td>
+                            <td style="text-align: center;"><button class="btn btn-success" style="margin-left: 5px;padding: 3px 6px;" type="submit"><i class="fa fa-check" style="font-size: 15px;"></i></button><button class="btn btn-danger" style="margin-left: 5px;padding: 3px 6px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i></button></td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="filtro" style="width: 390px; display: flex; justify-content: space-between;float: right; flex-direction: row; display: none;   ">
+        <div style="width: 150px;">
+            <input type="text" class="form-control" id="fechaFil1" name="fechaHora" placeholder="Desde" style="background-color: rgb(255, 255, 255);">
+        </div>
+        <div style="width: 150px;">
+            <input type="text" class="form-control" id="fechaFil2" name="fechaHora" placeholder="Hasta" style="background-color: rgb(255, 255, 255);">
+        </div>
+        <button  id="filtrobtn" class="btn btn-primary" onclick="filtrar()" >Ordenar</button>
+    </div>
+
+
+    <div id="miDiv" style=" position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(96, 119, 124, 0.384); z-index: 1; display: none;">
+        <div data-aos="fade-down" data-aos-duration="1000" data-aos-delay="100" data-aos-once="true" class="login-card" style="font-family: Roboto, sans-serif;margin-top: 10%;text-align: justify;height: 450px; ">
+            <p class="profile-name-card"> <i class="fa fa-calendar-plus-o d-inline" style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i></p>
+            <form class="form-signin"><span class="reauth-email" style="margin:11px;"> </span>
+                <input class="form-control" type="number" id="idsend" required="" placeholder="ID" autofocus="">
+                <input class="form-control" type="text" id="nombresend" required="" placeholder="Nombre" autofocus="">
+                <input class="form-control" type="text" id="carrerasend" required="" placeholder="Carrera">
+                <select id="frutas" class="form-control" name="frutas">
+
+                </select>
+                <input type="text" class="form-control" id="fechaHora" name="fechaHora" placeholder="Selecciona fecha y hora" style="background-color: rgb(255, 255, 255);">
+            </form>
+            <button class="btn btn-primary pull-left" type="button" style="margin-right: 0px;background: #9f000f;border-style: none;margin-top: 10px;"  onclick="toggleDiv()"><i class="fa fa-times"></i>Cancel</button>
+            <button class="btn btn-primary pull-right" type="button" style="margin-bottom: 0px;background: rgb(1, 192, 160);border-style: none;border-color: var(--orange);margin-top: 10px;" onclick="enviarData()"><i class="fa fa-arrow-down"></i>Add</button>
+        </div>
+        
+    </div>  
+    
+    <div class="advertencia" id="advertencia">
+        <h2>¡Advertencia!</h2>
+        <p>Laboratorio lleno</p>
+    </div>
+
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        var final_url ='https://zpy2p91du7.execute-api.us-east-1.amazonaws.com/default/prueba';
+        var actuales = 0;
+        var ordenar = 0;
+
+
+        function filtrar(){
+            var btn = document.getElementById("filtrobtn");
+            var fechaFil1 = document.getElementById("fechaFil1");
+            var fechaFil2 = document.getElementById("fechaFil2");
+            if( ordenar === 0){
+
+                if((fechaFil1.value !== "" && fechaFil2.value !== "") ){
+                    btn.style.background = "orange";
+                    btn.innerHTML = `Cancelar`;
+                    enviarFiltro();
+                    ordenar = 1;
+                }
+            }else{
+                btn.style.background = "rgb(13,110,253)";
+                btn.innerHTML = `Ordenar`;
+                fechaFil1.value = "";
+                fechaFil2.value = "";
+                cargarDatosOld();
+                ordenar = 0;
+            }
+        }
+        function enviarFiltro(){
+            var fechaFil1 = document.getElementById("fechaFil1");
+            var fechaFil2 = document.getElementById("fechaFil2");
+            var formData = $.param({
+                "Desde": fechaFil1.value,
+                "Hasta": fechaFil2.value,
+            });
+            url_last = final_url+'?'+formData;
+            $.ajax({
+            type: "PUT",
+            url: url_last,
+            
+            data: formData,
+            success: function (data) {
+                $('#miTabla tbody').empty();
+                $.each(data.data, function(index, item) {
+                $('#miTabla tbody').append('<tr><td>' + item.idEstudiante + '</td><td>' + item.nombre + '</td>'+'</td><td>' + item.fecha + '</td>'+'</td><td>' + item.laboratorio.nombre + '</td>'+'<td style="text-align: center;"><button class="btn btn-danger" style="margin-left: 5px;padding: 3px 6px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i><a>  Delete</a></button></td>'+'</tr>');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+        }
+
+
+        function cambiarEstado(){
+            var btn = document.getElementById("pasadosbtn");
+            var filtrobtn = document.getElementById("filtro");
+            if( actuales === 0){
+                btn.style.background = "blue";
+                btn.innerHTML = `<i class="fa fa-hourglass-end"></i>&nbsp;Actuales`;
+                cargarDatosOld();
+                setTimeout(function() {
+                    filtrobtn.style.display = "inline-flex";
+                }, 1200);
+                
+                actuales = 1;
+            }else{
+                btn.style.background = " var(--bs-teal)";
+                btn.innerHTML = `<i class="fa fa-hourglass-end"></i>&nbsp;Pasados`;
+                filtrobtn.classList.remove("mostrar");
+                setTimeout(function() {
+                    filtrobtn.style.display = "none";
+                }, 1200);
+                cargarDatos();
+                actuales = 0;
+            }
+        }
+
+        flatpickr("#fechaHora", {
+            enableTime: true,
+            dateFormat: "H:i d/m/Y",
+            time_24hr: true,
+            minuteIncrement: 60,
+            minDate: "today",
+            onChange: function(selectedDates, dateStr, instance) {
+            
+                const selectedDate = selectedDates[0];
+                const minHour = 8;
+                const maxHour = 21;
+
+                if (selectedDate.getHours() < minHour) {
+                    instance.setDate(new Date(selectedDate.setHours(minHour, 0, 0, 0)));
+                }
+
+                if (selectedDate.getHours() > maxHour) {
+                    instance.setDate(new Date(selectedDate.setHours(maxHour, 0, 0, 0)));
+                }
+            }
+        });
+        flatpickr("#fechaFil1",{
+            enableTime: true,
+            dateFormat: "H:i d/m/Y",
+            time_24hr: true,
+            minuteIncrement: 60,
+            //minDate: "today",
+            maxDate: "today",
+            onChange: function(selectedDates, dateStr, instance) {
+            
+                const selectedDate = selectedDates[0];
+                const minHour = 8;
+                const maxHour = 21;
+
+                if (selectedDate.getHours() < minHour) {
+                    instance.setDate(new Date(selectedDate.setHours(minHour, 0, 0, 0)));
+                }
+
+                if (selectedDate.getHours() > maxHour) {
+                    instance.setDate(new Date(selectedDate.setHours(maxHour, 0, 0, 0)));
+                }
+            }
+        });
+        flatpickr("#fechaFil2  ",{
+            enableTime: true,
+            dateFormat: "H:i d/m/Y",
+            time_24hr: true,
+            minuteIncrement: 60,
+            //minDate: "today",
+            maxDate: "today",
+            onChange: function(selectedDates, dateStr, instance) {
+            
+                const selectedDate = selectedDates[0];
+                const minHour = 8;
+                const maxHour = 21;
+
+                if (selectedDate.getHours() < minHour) {
+                    instance.setDate(new Date(selectedDate.setHours(minHour, 0, 0, 0)));
+                }
+
+                if (selectedDate.getHours() > maxHour) {
+                    instance.setDate(new Date(selectedDate.setHours(maxHour, 0, 0, 0)));
+                }
+            }
+        });
+        function enviarData(){
+            console.log("Enviando");
+            var id = document.getElementById("idsend").value;
+            var nombre = document.getElementById("nombresend").value;
+            var carrera = document.getElementById("carrerasend").value;
+            var laboratorio = document.getElementById("frutas").value;
+            var fecha = document.getElementById("fechaHora").value;
+            var queryParams = $.param({
+                "IdEstudiante": id,
+                "NombreEstudiante": nombre,
+                "Carrera": carrera,
+                "Laboratorio": laboratorio,
+                "Fecha": fecha
+            });
+            url_last = final_url+'?'+queryParams;
+
+            function toggleAdvertencia() {
+                var advertencia = document.getElementById("advertencia");
+                advertencia.style.display = "block";
+                advertencia.classList.toggle("mostrar");
+                if (advertencia.classList.contains("mostrar")) {
+                    setTimeout(function() {
+                        //advertencia.style.display = "none";
+                        advertencia.classList.remove("mostrar");
+                    }, 1500);
+
+                
+                }
+                setTimeout(function() {
+                        advertencia.style.display = "none";
+                    }, 2000);
+                //advertencia.style.display = "none";
+             }
+            $.ajax({
+            type: "POST",
+            url: url_last,
+            success: function (response) {
+                //console.log(response);
+                if(response.data === 0){
+                    toggleDiv();
+                    cargarDatos();
+                }else if(response.data === 1){
+                    toggleAdvertencia();
+                }
+
+                console.log(response);
+            },
+            error: function (error) {
+                // Manejar errores (si es necesario)
+                console.error(error);
+            }
+        });
+        }
+
+        function toggleDiv() {
+            var miDiv = document.getElementById("miDiv");
+            if (miDiv.style.display === "none") {
+                miDiv.style.display = "block"; 
+                $.ajax({
+                    url: final_url,
+                    type: 'DELETE', 
+                    crossDomain: true,  
+                    dataType: 'json', 
+                    success: function (data) {
+                        console.log(data);
+                        $('#frutas').empty();
+                        $.each(data.data, function(index, item) {
+                        $('#frutas').append('<option>'+item.nombre+'</option>');
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+
+            
+            } else {
+                miDiv.style.display = "none"; 
+            }
+        }
+
+        function cargarDatos() {
+            document.body.style.cursor = 'wait';
+            document.body.classList.add('loading');
+                console.log("Cargando...");
+                $.ajax({
+                    url: final_url,
+                    type: 'GET', 
+                    crossDomain: true,  
+                    dataType: 'json',  
+                    success: function (data) {
+                        console.log(data);
+                        $('#miTabla tbody').empty();
+                        $.each(data.data, function(index, item) {
+                        $('#miTabla tbody').append('<tr><td style="text-align: center;">' + item.IdEstudiante + '</td><td style="text-align: center;">' + item.nombre + '</td>'+'</td><td style="text-align: center;">' + item.laboratorio.nombre + '</td>'+'</td><td style="text-align: center;">' + item.fecha + '</td>'+'<td style="text-align: center;"><button class="btn btn-danger" style="margin-left: 5px;padding: 3px 6px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i><a>  Delete</a></button></td>'+'</tr>');
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+                document.body.style.cursor = 'default';
+                document.body.classList.remove('loading');
+        }
+        function cargarDatosOld() {
+            document.body.style.cursor = 'wait';
+            document.body.classList.add('loading');
+                console.log("Cargando...");
+                $.ajax({
+                    url: final_url,
+                    type: 'PATCH', 
+                    crossDomain: true,  
+                    dataType: 'json',  
+                    success: function (data) {
+                        console.log(data);
+                        $('#miTabla tbody').empty();
+                        $.each(data.data, function(index, item) {
+                            $('#miTabla tbody').append('<tr><td style="text-align: center;">' + item.IdEstudiante + '</td><td style="text-align: center;">' + item.nombre + '</td>'+'</td><td style="text-align: center;">' + item.laboratorio.nombre + '</td>'+'</td><td style="text-align: center;">' + item.fecha + '</td>'+'<td style="text-align: center;"><button class="btn btn-danger" style="margin-left: 5px;padding: 3px 6px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i><a>  Delete</a></button></td>'+'</tr>');
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+                document.body.style.cursor = 'default';
+                document.body.classList.remove('loading');
+
+
+        }
+        function cargandoMientras(){
+            if(actuales === 0){
+                console.log("nuevos");
+                cargarDatos();
+            }else{
+                if(ordenar === 0 ){
+                    console.log("viejos");
+                    cargarDatosOld();
+                }   
+            }
+        }
+
+        $(document).ready(function() {
+
+            cargarDatos();
+            
+            setInterval(cargandoMientras, 60000);
+        });
+    </script>
+</body>
+
+</html>
+
